@@ -1,4 +1,5 @@
 const express = require('express')
+const path = require('path')
 const app = express()
 
 // Serwowanie frontendu (Vite build)
@@ -9,26 +10,10 @@ app.use(express.json())
 
 // Dane z zadania (phonebook)
 let persons = [
-  { 
-    id: 1,
-    name: "Arto Hellas", 
-    number: "040-123456"
-  },
-  { 
-    id: 2,
-    name: "Ada Lovelace", 
-    number: "39-44-5323523"
-  },
-  { 
-    id: 3,
-    name: "Dan Abramov", 
-    number: "12-43-234345"
-  },
-  { 
-    id: 4,
-    name: "Mary Poppendieck", 
-    number: "39-23-6423122"
-  }
+  { id: 1, name: "Arto Hellas", number: "040-123456" },
+  { id: 2, name: "Ada Lovelace", number: "39-44-5323523" },
+  { id: 3, name: "Dan Abramov", number: "12-43-234345" },
+  { id: 4, name: "Mary Poppendieck", number: "39-23-6423122" }
 ]
 
 // Zadanie 3.1 – strona główna
@@ -102,7 +87,13 @@ const errorHandler = (error, req, res, next) => {
 }
 app.use(errorHandler)
 
-const PORT = 3001
+// 🔥 NAJWAŻNIEJSZE — obsługa frontendu (React Router)
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'dist', 'index.html'))
+})
+
+// 🔥 Render wymaga PORT z env
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
